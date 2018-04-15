@@ -19,11 +19,12 @@ public class MyDBHelper extends SQLiteOpenHelper{
      */
     private static final String CREATE_USER = "create table user(" +
             "id text primary key, " +
-            "name text, " +
+            "name text not null, " +
             "sex integer, " +
             "birth text, " +
             "address text, " +
-            "photo text)";
+            "photo text," +
+            "token text)";
     /*
     动态内容表：
     desc是动态中的文字描述，可以为空
@@ -66,7 +67,10 @@ public class MyDBHelper extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //context.deleteDatabase("People.db");
-        db.execSQL("drop table if exists people");
+        db.execSQL("drop table if exists user");
+        db.execSQL("drop table if exists content");
+        db.execSQL("drop table if exists massage");
+
         onCreate(db);
     }
 }
