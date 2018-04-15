@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.pm.ActivityInfoCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.lyle.android.db.MyDBHelper;
 import com.tencent.wcdb.database.SQLiteDatabase;
 
@@ -43,8 +43,11 @@ public class MainActivity extends AppCompatActivity {
         if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
         }
+        if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.INTERNET)!= PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.INTERNET},1);
+        }
 
-        MyDBHelper myDBHelper = new MyDBHelper(this,DB_NAME,null,3);
+        MyDBHelper myDBHelper = new MyDBHelper(this,DB_NAME,null,1);
         if(myDBHelper!=null) {
             database = myDBHelper.getReadableDatabase();
         }
@@ -63,9 +66,14 @@ public class MainActivity extends AppCompatActivity {
         database.close();
         myDBHelper.close();
 
+        Intent intent = new Intent(MainActivity.this,Detail.class);
+        //startActivity(intent);
+
         imageView = (ImageView)findViewById(R.id.imageView2);
-        imageView.setImageURI(Uri.fromFile
-                (new File("/sdcard/PianoDream/screenshot.png")));
+        //imageView.setImageURI(Uri.fromFile(new File("/sdcard/PianoDream/screenshot.png")));
+        Glide.with(this)
+                .load("http://img.my.csdn.net/uploads/201211/18/1353170697_1414.png")
+                .into(imageView);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,8 +99,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        Intent intent = new Intent(MainActivity.this,Detail.class);
-//        startActivity(intent);
+
     }
 
     @Override
